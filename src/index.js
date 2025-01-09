@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/database");
+const routes = require("./routes/index.routes");
+const { errorHandler } = require("./middleware/error.middleware");
 
 dotenv.config();
 
@@ -14,7 +16,11 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// routes
+app.use(routes);
 
+// Error handling
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
