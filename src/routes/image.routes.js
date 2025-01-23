@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const { body } = require("express-validator");
 const ImageController = require("../controllers/image.controller");
+const { transformLimiter } = require("../middleware/rate-limit.middleware");
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -16,6 +17,7 @@ router.post("/upload", upload.single("image"), ImageController.upload);
 
 router.post(
   "/:id/transform",
+  transformLimiter,
   [
     body("transformations").isObject(),
     body("transformations.resize.width").optional().isInt({ min: 1 }),
